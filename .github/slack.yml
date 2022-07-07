@@ -1,0 +1,39 @@
+username: GitHub-CI
+icon_url: https://octodex.github.com/images/mona-the-rivetertocat.png
+
+pretext: "*Event*: `{{eventName}}` <{{refUrl}}|*Git Branch*: {{ref}}> *Status*: `{{jobStatus}}`"
+title: |
+  <{{workflowUrl}}|{{workflow}}>
+
+text: | 
+  *Compare*: {{#if description}}<{{diffUrl}}|`{{diffRef}}`> - {{description}}{{/if}}
+  {{#if payload.commits}}
+  *Commits*
+  {{#each payload.commits}}
+  <{{this.url}}|`{{truncate this.id 8}}`> - {{this.message}}
+  {{/each}}
+  {{/if}}
+
+fallback: |-
+  [GitHub] {{workflow}} #{{runNumber}} {{jobName}} is {{jobStatus}}
+
+fields:
+  - title: Job Steps
+    value: "{{#each jobSteps}}{{icon this.outcome}} {{@key}}\n{{/each}}"
+    short: false
+
+footer: >-
+  <{{repositoryUrl}}|{{repositoryName}}> {{workflow}} #{{runNumber}}
+
+colors:
+  success: '#5DADE2'
+  failure: '#884EA0'
+  cancelled: '#A569BD'
+  default: '#7D3C98'
+
+icons:
+  success: ':ok_hand:'
+  failure: ':bomb:'
+  cancelled: ':x:'
+  skipped: ':heavy_minus_sign:'
+  default: ':interrobang:'
