@@ -6,14 +6,13 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
-  # job1:
-  #   uses: ./.github/workflows/test-workflow.yml
-  #   with:
-  #     webhook: https://hooks.slack.com/services/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 
-      # ${{ secrets.SLACK_WEBHOOK_UR }}
-    
   Test:
-    # needs: job1
+    uses: ./.github/workflows/test-workflow.yml
+    with:
+      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+    
+  Deploy:
+    needs: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,29 +25,8 @@ jobs:
         with:
           fetch-depth: 0
       
-      # - name: Use Node.js 12.20.1
-      #   uses: actions/setup-node@v2
-      #   id: Setup-Node
-      #   with:
-      #     node-version: 12.20.1
-      #     cache: "npm"      
-      # - name: Cache node modules
-      #   id: node-cache
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      # - name: Install Angular Cli
-      #   id: Install-Angular-Cli
-      #   run: npm install -g @angular/cli@${{matrix.angular-version}}
-      # - name: Installing dependencies
-      #   run: npm ci --ignore-scripts
-      # - name: Running linter
-      #   id: Running-linter
-      #   run: ng lint
-      # - name: Running tests
-      #   id: Running-tests
-      #   run: ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - name: NG version
+        run: ng version
       - uses: act10ns/slack@v1
         with:
           status: ${{ job.status }}
