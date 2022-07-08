@@ -63,8 +63,8 @@ jobs:
         with:
           fetch-depth: 0
       
-      # - name: NG version
-        # run: ng version
+      - name: NG version
+        run: npm run build
       - uses: act10ns/slack@v1
         with:
           status: ${{ job.status }}
