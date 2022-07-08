@@ -3,7 +3,7 @@ name: CI Test Last Commit
 on:
   push
 env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_UR }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   # job1:
