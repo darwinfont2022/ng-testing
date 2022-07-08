@@ -3,7 +3,7 @@ name: CI Test Last Commit
 on:
   push
 env:
-  SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_UR }}
 
 jobs:
   # job1:
