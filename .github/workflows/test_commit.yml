@@ -63,10 +63,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Installing dependencies
-        id: npm ci
+        id: npm-ci
         run: npm ci --ignore-scripts
       - name: Building
-        id: npm run build
+        id: npm-run-build
         run: npm run build
       - uses: act10ns/slack@v1
         with:
