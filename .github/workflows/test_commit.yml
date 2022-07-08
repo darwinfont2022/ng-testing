@@ -3,13 +3,15 @@ name: CI Test Last Commit
 on:
   push
 env:
-  SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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 # ${{ secrets.SLACK_WEBHOOK_UR }}
+  SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+   # ${{ secrets.SLACK_WEBHOOK_UR }}
 
 jobs:
   job1:
     uses: ./.github/workflows/test-workflow.yml
     with:
-      webhook: https://hooks.slack.com/services/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 # ${{ secrets.SLACK_WEBHOOK_UR }}
+      webhook: https://hooks.slack.com/services/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 
+      # ${{ secrets.SLACK_WEBHOOK_UR }}
     
   Test:
     needs: job1
