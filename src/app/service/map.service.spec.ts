@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { MapService } from './map.service';
 
-fdescribe('MapService', () => {
+describe('MapService', () => {
   let mapService: MapService;
 
   
