@@ -7,9 +7,47 @@ env:
 
 jobs:
   Test:
-    uses: ./.github/workflows/test-workflow.yml
-    with:
-      webhook: ${{ env.SLACK_WEBHOOK_URL }}
+    name: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        angular-version:   
+          - 14.0.4
+    steps:
+      - uses: actions/checkout@v2
+        id: Checkout
+        with:
+          fetch-depth: 0
+      - name: Use Node.js 14.15.0
+        uses: actions/setup-node@v2
+        id: Setup-Node
+        with:
+          node-version: 14.15.0
+          cache: "npm"      
+      - name: Cache node modules
+        id: node-cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Angular Cli
+        id: Install-Angular-Cli
+        run: npm install -g @angular/cli@${{matrix.angular-version}}
+      - name: Installing dependencies
+        run: npm ci --ignore-scripts
+      - name: Running linter
+        id: Running-linter
+        run: ng lint
+      - name: Running tests
+        id: Running-tests
+        run: ng test --no-watch --no-progress --code-coverage
+      - uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          config: .github/slack.yml
+        if: failure() || cancelled()
+
     
   Deploy:
     needs: Test
