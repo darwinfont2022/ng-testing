@@ -5,11 +5,14 @@ import { CreateProductDTO, Product, UpdateProductDTO } from "../models/product.m
 import { environment } from "./../../environments/environment";
 
 import { genertateOneProduct, generateProducts } from "../models/product.mock";
-import { HttpStatusCode } from "@angular/common/http";
+import { HttpStatusCode, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { TokenInterceptor } from "./../interceptor/token.interceptor";
+import { TokenService } from "./token.service";
 
 describe('Product Service', () => {
     let productService: ProductsService;
     let httpController: HttpTestingController;
+    let tokenService: TokenService;
     const API_URL = `${environment.API_URL}/api/v1`;
 
     beforeEach(() => {
@@ -18,11 +21,16 @@ describe('Product Service', () => {
                 HttpClientTestingModule
             ],
             providers: [
-                ProductsService
+                ProductsService,
+                TokenService,
+                {
+                    provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true
+                }
             ]
         });
         productService = TestBed.inject(ProductsService);
         httpController = TestBed.inject(HttpTestingController);
+        tokenService = TestBed.inject(TokenService);
     })
 
     afterEach(() => {
@@ -32,6 +40,26 @@ describe('Product Service', () => {
     it('should be created', () => {
         expect(productService).toBeTruthy();
     })
+
+    describe('Test for method getAllSimpel', () => {
+        it('should behave return a product list', (doneFn) => {
+            const token = '123'
+            const mockProducts: Product[] = generateProducts();
+
+            spyOn(tokenService, 'getToken').and.returnValue(token);
+
+            productService.getAllSimple()
+                .subscribe((data) => {
+                    expect(data.length).toEqual(mockProducts.length);
+                    doneFn();
+                });
+            const url = `${API_URL}/products`;
+            const req = httpController.expectOne(url);
+            const headers = req.request.headers;
+            expect(headers.get('Authorization')).toEqual(`Bearer ${token}`);
+            req.flush(mockProducts);
+        });
+    });
 
     describe('Test method getOne', () => {
         it('should be return one component', (doneFn) => {
@@ -247,17 +275,4 @@ describe('Product Service', () => {
         });
     });
 
-    describe('Test for method getAllSimpel', () => {
-        it('should behave return a product list', (doneFn) => {
-            const mockProducts: Product[] = generateProducts();
-            productService.getAllSimple()
-                .subscribe((data) => {
-                    expect(data.length).toEqual(mockProducts.length);
-                    doneFn();
-                });
-            const url = `${API_URL}/products`;
-            const req = httpController.expectOne(url);
-            req.flush(mockProducts);
-        });
-    });
 });

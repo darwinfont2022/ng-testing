@@ -1,3 +1,5 @@
+[![.github/workflows/test_commit.yml](https://github.com/darwinfont2022/ng-testing/actions/workflows/test_commit.yml/badge.svg)](https://github.com/darwinfont2022/ng-testing/actions/workflows/test_commit.yml)
+
 # TestingServices
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.1.
