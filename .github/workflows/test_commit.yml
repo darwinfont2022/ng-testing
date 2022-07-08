@@ -37,7 +37,7 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Running linter
         id: Running-linter
-        run: ng lint
+        run: npm run lint
       - name: Running tests
         id: Running-tests
         run: npm run test --no-watch --no-progress --code-coverage
