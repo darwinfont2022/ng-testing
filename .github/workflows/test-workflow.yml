@@ -45,7 +45,7 @@ jobs:
         run: ng lint
       - name: Running tests
         id: Running-tests
-        run: ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+        run: ng test --no-watch --no-progress --code-coverage
       - uses: act10ns/slack@v1
         with:
           status: ${{ job.status }}
