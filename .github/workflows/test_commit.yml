@@ -62,8 +62,11 @@ jobs:
         id: Checkout
         with:
           fetch-depth: 0
-      
-      - name: NG version
+      - name: Installing dependencies
+        id: npm ci
+        run: npm ci --ignore-scripts
+      - name: Building
+        id: npm run build
         run: npm run build
       - uses: act10ns/slack@v1
         with:
