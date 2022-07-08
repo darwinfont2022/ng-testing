@@ -51,4 +51,4 @@ jobs:
           status: ${{ job.status }}
           steps: ${{ toJson(steps) }}
           config: .github/slack.yml
-        if: always() # failure() || cancelled()
+        if: failure() || cancelled()

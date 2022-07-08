@@ -9,7 +9,7 @@ jobs:
   Test:
     uses: ./.github/workflows/test-workflow.yml
     with:
-      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+      webhook: ${{ env.SLACK_WEBHOOK_URL }}
     
   Deploy:
     needs: Test
