@@ -5,6 +5,7 @@ import { CreateProductDTO, Product, UpdateProductDTO } from "../models/product.m
 import { environment } from "./../../environments/environment";
 
 import { genertateOneProduct, generateProducts } from "../models/product.mock";
+import { HttpStatusCode } from "@angular/common/http";
 
 describe('Product Service', () => {
     let productService: ProductsService;
@@ -44,6 +45,94 @@ describe('Product Service', () => {
             const url = `${API_URL}/${mockProduct.id}`;
             const req = httpController.expectOne(url);
             req.flush(mockProduct);
+            expect(req.request.method).toBe('GET');
+        });
+
+        it('should be return error 404', (doneFn) => {
+            const id = '123';
+            const msgError = '404 Not Found';
+            const mockError = {
+                status: HttpStatusCode.NotFound,
+                statusText: msgError,
+            }
+            
+            productService.getOne(id).subscribe({
+                error: (error) => {
+                    expect(error).toBe('El producto no existe');
+                    doneFn();
+                }
+            } 
+            );
+            
+            const url = `${API_URL}/${id}`;
+            const req = httpController.expectOne(url);
+            req.flush(msgError, mockError);
+            expect(req.request.method).toBe('GET');
+        });
+
+        it('should be return error 409', (doneFn) => {
+            const id = '123';
+            const msgError = '409 Conflict';
+            const mockError = {
+                status: HttpStatusCode.Conflict,
+                statusText: msgError,
+            }
+            
+            productService.getOne(id).subscribe({
+                error: (error) => {
+                    expect(error).toBe('Algo esta fallando en el server');
+                    doneFn();
+                }
+            } 
+            );
+            
+            const url = `${API_URL}/${id}`;
+            const req = httpController.expectOne(url);
+            req.flush(msgError, mockError);
+            expect(req.request.method).toBe('GET');
+        });
+
+        it('should be return error 401', (doneFn) => {
+            const id = '123';
+            const msgError = '401 Unauthorized';
+            const mockError = {
+                status: HttpStatusCode.Unauthorized,
+                statusText: msgError,
+            }
+            
+            productService.getOne(id).subscribe({
+                error: (error) => {
+                    expect(error).toBe('No estas permitido');
+                    doneFn();
+                }
+            } 
+            );
+            
+            const url = `${API_URL}/${id}`;
+            const req = httpController.expectOne(url);
+            req.flush(msgError, mockError);
+            expect(req.request.method).toBe('GET');
+        });
+
+        it('should be return error 400', (doneFn) => {
+            const id = '123';
+            const msgError = '400 Bad Request';
+            const mockError = {
+                status: HttpStatusCode.BadRequest,
+                statusText: msgError,
+            }
+            
+            productService.getOne(id).subscribe({
+                error: (error) => {
+                    expect(error).toBe('Ups algo salio mal');
+                    doneFn();
+                }
+            } 
+            );
+            
+            const url = `${API_URL}/${id}`;
+            const req = httpController.expectOne(url);
+            req.flush(msgError, mockError);
             expect(req.request.method).toBe('GET');
         });
     });
